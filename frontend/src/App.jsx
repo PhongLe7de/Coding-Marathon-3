@@ -50,7 +50,7 @@ const App = () => {
             <Route
               path="/jobs/add-job"
               element={
-                isAuthenticated && user ? (
+                isAuthenticated ? (
                   <AddJobPage setJobAdded={setJobAdded} />
                 ) : (
                   <Navigate to="/login" />
@@ -60,7 +60,7 @@ const App = () => {
             <Route
               path="/edit-job/:id"
               element={
-                isAuthenticated && user ? (
+                isAuthenticated ? (
                   <EditJobPage setJobEdited={setJobEdited} />
                 ) : (
                   <Navigate to="/login" />
@@ -70,7 +70,7 @@ const App = () => {
             <Route
               path="/signup"
               element={
-                isAuthenticated && user? (
+                isAuthenticated ? (
                   <Navigate to="/" />
                 ) : (
                   <Signup setIsAuthenticated={setIsAuthenticated} />
@@ -80,7 +80,7 @@ const App = () => {
             <Route
               path="/login"
               element={
-                isAuthenticated && user ? (
+                isAuthenticated ? (
                   <Navigate to="/" />
                 ) : (
                   <Login setIsAuthenticated={setIsAuthenticated} setUser={setUser}/>
