@@ -5,11 +5,11 @@ const Job = require("../models/jobModel");
 const getAllJobs = async (req, res) => {
 
   try {
-    const jobs = await Job.find({ }).sort({ createdAt: -1 });
+    const jobs = await Job.find({}).sort({createdAt: -1});
     res.status(200).json(jobs);
   } catch (error) {
     console.error("Error fetching jobs:", error);
-    res.status(500).json({ error: "Server Error" });
+    res.status(500).json({error: "Server Error"});
   }
 };
 
@@ -17,7 +17,7 @@ const getAllJobs = async (req, res) => {
 const createJob = async (req, res) => {
 
   try {
-    const user_id = req.user._id;
+    const user_id = req.user.id;
     const newJob = new Job({
       ...req.body,
       user_id,
@@ -26,55 +26,60 @@ const createJob = async (req, res) => {
     res.status(201).json(newJob);
   } catch (error) {
     console.error("Error creating job:", error);
-    res.status(500).json({ error: "Server Error" });
+    res.status(500).json({error: "Server Error"});
   }
 };
 
 // Get job by ID
 const getJobById = async (req, res) => {
-  const { jobId } = req.params;
+  const {jobId} = req.params;
   if (!mongoose.Types.ObjectId.isValid(jobId)) {
-    return res.status(404).json({ error: "No such job" });
+    return res.status(404).json({error: "No such job"});
   }
 
   try {
     const job = await Job.findById(jobId);
     if (!job) {
       console.log("Job not found");
-      return res.status(404).json({ message: "Job not found" });
+      return res.status(404).json({message: "Job not found"});
     }
     res.status(200).json(job);
   } catch (error) {
     console.error("Error fetching job:", error);
-    res.status(500).json({ error: "Server Error" });
+    res.status(500).json({error: "Server Error"});
   }
 };
 
 // Update job by ID
 const updateJob = async (req, res) => {
-  const { jobId } = req.params;
+  const {jobId} = req.params;
+      const user_id = req.user.id;
+
   if (!mongoose.Types.ObjectId.isValid(jobId)) {
-    return res.status(404).json({ error: "No such job" });
+    return res.status(400).json({message: "Invalid job ID"});
   }
 
   try {
-    const user_id = req.user._id;
-    
-    const job = await Job.findOneAndUpdate(
-      { _id: jobId },
-      { ...req.body },
-      { new: true }
-    );
+    const job = await Job.findById(jobId);
+    if (user_id !== query.user_id.toString()) {
+      return res.status(404).json({message: "Not authorized"});
+    }
     if (!job) {
-      return res.status(404).json({ message: "Job not found" });
+      return res.status(404).json({message: "Job not found"});
     }
-    if (user_id !== job.user_id) {
-      return res.status(404).json({ message: "Not authorized" });
+    if (req.body.company) {
+      req.body.company = {
+        ...job.company.toObject(),
+        ...req.body.company
+      };
     }
-    res.status(200).json(job);
+    const updatedJob = await Job.findByIdAndUpdate(jobId, req.body, {
+      new: true
+    });
+
+    return res.status(200).json(updatedJob);
   } catch (error) {
-    console.error("Error updating job:", error);
-    res.status(500).json({ error: "Server Error" });
+    return res.status(500).json({message: "Failed to update job"});
   }
 };
 
@@ -86,15 +91,16 @@ const deleteJob = async (req, res) => {
   }
 
   try {
-    const user_id = req.user._id;
-    const job = await Job.findOneAndDelete({ _id: jobId });
-    if (!job) {
+    const user_id = req.user.id;
+    const query = await Job.findById({ _id: jobId });
+    if (!query) {
       return res.status(404).json({ message: "Job not found" });
     }
-    if (user_id !== job.user_id) {
+    if (user_id !== query.user_id.toString()) {
       return res.status(404).json({ message: "Not authorized" });
     }
-    res.status(204).send(); // 204 No Content
+    await Job.findByIdAndDelete(jobId);
+    res.status(204).send();
   } catch (error) {
     console.error("Error deleting job:", error);
     res.status(500).json({ error: "Server Error" });

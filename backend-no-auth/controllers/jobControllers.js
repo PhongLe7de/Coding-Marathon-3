@@ -45,27 +45,34 @@ const getJobById = async (req, res) => {
 
 // PUT /jobs/:jobId
 const updateJob = async (req, res) => {
-  const { jobId } = req.params;
+  const {jobId} = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(jobId)) {
-    return res.status(400).json({ message: "Invalid job ID" });
+    return res.status(400).json({message: "Invalid job ID"});
   }
 
   try {
-    const updatedJob = await Job.findOneAndUpdate(
-      { _id: jobId },
-      { ...req.body },
-      { new: true }
-    );
-    if (updatedJob) {
-      res.status(200).json(updatedJob);
-    } else {
-      res.status(404).json({ message: "Job not found" });
+    const job = await Job.findById(jobId);
+
+    if (!job) {
+      return res.status(404).json({message: "Job not found"});
     }
+    if (req.body.company) {
+      req.body.company = {
+        ...job.company.toObject(),
+        ...req.body.company
+      };
+    }
+    const updatedJob = await Job.findByIdAndUpdate(jobId, req.body, {
+      new: true
+    });
+
+    return res.status(200).json(updatedJob);
   } catch (error) {
-    res.status(500).json({ message: "Failed to update job" });
+    return res.status(500).json({message: "Failed to update job"});
   }
 };
+
 
 // DELETE /jobs/:jobId
 const deleteJob = async (req, res) => {
