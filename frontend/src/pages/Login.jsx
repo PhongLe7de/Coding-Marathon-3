@@ -6,7 +6,7 @@ const Login = ({setUser}) => {
   const navigate = useNavigate();
   const username = useField("username");
   const password = useField("password");
-  const { login } = useLogin("http://localhost:4000/api/users/login");
+  const { login } = useLogin("https://coding-marathon-3-be-noauth.onrender.com/api/users/login");
 
   const errorText = "Incorrect username or password. Please try again."
 

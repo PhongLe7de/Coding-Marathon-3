@@ -17,7 +17,7 @@ const Signup = () => {
   const email = useField("email");
 
 
-  const { signup, error } = useSignup("http://localhost:4000/api/users/signup");
+  const { signup, error } = useSignup("https://coding-marathon-3-be-noauth.onrender.com/api/users/signup");
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();

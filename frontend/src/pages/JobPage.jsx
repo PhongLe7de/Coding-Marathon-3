@@ -10,7 +10,7 @@ const JobPage = ({setJobDeleted}) => {
 
   const deleteJob = async (id) => {
     try {
-      const res = await fetch(`/api/jobs/${id}`, {
+      const res = await fetch(`https://coding-marathon-3-be-noauth.onrender.com/api/jobs/${id}`, {
         method: "DELETE",
       });
       if (!res.ok) {
@@ -25,7 +25,7 @@ const JobPage = ({setJobDeleted}) => {
     const fetchJob = async () => {
       try {
         console.log("id: ", id);
-        const res = await fetch(`/api/jobs/${id}`);
+        const res = await fetch(`https://coding-marathon-3-be-noauth.onrender.com/api/jobs/${id}`);
         if (!res.ok) {
           throw new Error("Network response was not ok");
         }
