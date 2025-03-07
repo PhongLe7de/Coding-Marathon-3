@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import JobListings from "../components/JobListings";
-
-const Home = ({jobEdited, jobAdded, isAuthenticated, jobDeleted}) => {
+import { Link } from "react-router-dom";
+const Home = ({ jobEdited, jobAdded, isAuthenticated, jobDeleted }) => {
   const [jobs, setJobs] = useState(null);
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(true);
@@ -9,7 +9,9 @@ const Home = ({jobEdited, jobAdded, isAuthenticated, jobDeleted}) => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const res = await fetch("https://coding-marathon-3-be-noauth.onrender.com/api/jobs");
+        const res = await fetch(
+          "https://coding-marathon-3-be-noauth.onrender.com/api/jobs"
+        );
         if (!res.ok) {
           throw new Error("could not fetch the data for that resource");
         }
@@ -30,6 +32,24 @@ const Home = ({jobEdited, jobAdded, isAuthenticated, jobDeleted}) => {
       {error && <div>{error}</div>}
       {isPending && <div>Loading...</div>}
       {jobs && <JobListings jobs={jobs} />}
+      <Link
+        to="/jobs/add-job"
+        style={{
+          padding: "10px 20px",
+          backgroundColor: "#4CAF50",
+          color: "white",
+          borderRadius: "5px",
+          textDecoration: "none",
+          fontWeight: "bold",
+          textAlign: "center",
+          display: "inline-block",
+          transition: "background-color 0.3s ease",
+        }}
+        onMouseEnter={(e) => (e.target.style.backgroundColor = "#45a049")}
+        onMouseLeave={(e) => (e.target.style.backgroundColor = "#4CAF50")}
+      >
+        Add Job
+      </Link>
     </div>
   );
 };

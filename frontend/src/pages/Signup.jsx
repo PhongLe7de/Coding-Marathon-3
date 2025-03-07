@@ -4,20 +4,19 @@ import useSignup from "../hooks/useSignup";
 import useField from "../hooks/useField";
 
 const Signup = () => {
-  const navigate = useNavigate();
+  const bio = useField("text");
   const name = useField("text");
-  const username = useField("text");
-  const password = useField("password");
-  const phone_number = useField("text");
   const gender = useField("text");
+  const address = useField("text");
+  const username = useField("text");
+  const phone_number = useField("text");
+  const password = useField("password");
   const date_of_birth = useField("date");
   const membership_status = useField("text");
-  const bio = useField("text");
-  const address = useField("text");
-  const email = useField("email");
 
+  const navigate = useNavigate();
 
-  const { signup, error } = useSignup("https://coding-marathon-3-be-noauth.onrender.com/api/users/signup");
+  const { signup, error } = useSignup(`https://coding-marathon-3-be-auth.onrender.com/api/users/signup`);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -34,7 +33,7 @@ const Signup = () => {
     });
 
     if (!error) {
-      navigate("/"); // Navigate to home page after successful signup
+      navigate("/"); 
     }
   };
 
@@ -47,10 +46,6 @@ const Signup = () => {
 
         <label>Username:</label>
         <input {...username} required />
-
-        <label>Email:</label>
-        <input {...email} required />
-
         <label>Password:</label>
         <input {...password} required />
 

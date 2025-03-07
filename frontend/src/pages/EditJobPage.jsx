@@ -16,12 +16,17 @@ const EditJobPage = ({setJobEdited}) => {
 
   const navigate = useNavigate();
 
+  const user = JSON.parse(localStorage.getItem("user"));
+  const token = user ? user.token : null;
+
   const updateJob = async (job) => {
     try {
-      const res = await fetch(`https://coding-marathon-3-be-noauth.onrender.com/api/jobs/${job.id}`, {
+      const res = await fetch(`https://coding-marathon-3-be-auth.onrender.com/api/jobs/${job.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+
         },
         body: JSON.stringify(job),
       });
@@ -37,7 +42,7 @@ const EditJobPage = ({setJobEdited}) => {
   useEffect(() => {
     const fetchJob = async () => {
       try {
-        const res = await fetch(`https://coding-marathon-3-be-noauth.onrender.com/api/jobs/${id}`);
+        const res = await fetch(`https://coding-marathon-3-be-auth.onrender.com/api/jobs/${id}`);
         if (!res.ok) {
           throw new Error("Network response was not ok");
         }

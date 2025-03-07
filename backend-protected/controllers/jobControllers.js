@@ -52,36 +52,45 @@ const getJobById = async (req, res) => {
 
 // Update job by ID
 const updateJob = async (req, res) => {
-  const {jobId} = req.params;
-      const user_id = req.user.id;
+  const { jobId } = req.params;
+  const user_id = req.user._id;
 
   if (!mongoose.Types.ObjectId.isValid(jobId)) {
-    return res.status(400).json({message: "Invalid job ID"});
+    return res.status(400).json({ message: "Invalid job ID" });
   }
 
   try {
     const job = await Job.findById(jobId);
-    if (user_id !== query.user_id.toString()) {
-      return res.status(404).json({message: "Not authorized"});
-    }
     if (!job) {
-      return res.status(404).json({message: "Job not found"});
+      return res.status(404).json({ message: "Job not found" });
     }
+
+
+    if (!user_id.equals(job.user_id)) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    // Safely merge the company object if updating it
     if (req.body.company) {
       req.body.company = {
         ...job.company.toObject(),
-        ...req.body.company
+        ...req.body.company,
       };
     }
+
+    // Update the job
     const updatedJob = await Job.findByIdAndUpdate(jobId, req.body, {
-      new: true
+      new: true,
+      runValidators: true,
     });
 
     return res.status(200).json(updatedJob);
   } catch (error) {
-    return res.status(500).json({message: "Failed to update job"});
+    console.error("Error updating job:", error);
+    return res.status(500).json({ message: "Failed to update job" });
   }
 };
+
 
 // Delete job by ID
 const deleteJob = async (req, res) => {
@@ -92,7 +101,7 @@ const deleteJob = async (req, res) => {
 
   try {
     const user_id = req.user.id;
-    const query = await Job.findById({ _id: jobId });
+const query = await Job.findById(jobId);
     if (!query) {
       return res.status(404).json({ message: "Job not found" });
     }
@@ -108,6 +117,12 @@ const deleteJob = async (req, res) => {
 };
 
 module.exports = {
+  getAllJobs,
+  createJob,
+  getJobById,
+  updateJob,
+  deleteJob
+};
   getAllJobs,
   createJob,
   getJobById,

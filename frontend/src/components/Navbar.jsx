@@ -20,15 +20,14 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated, user, setUser }) => {
       <div className="links">
         {user && (
           <div>
-            <Link to="/jobs/add-job">Add Job</Link>
             <span>{user.username}</span>
             <button onClick={handleClick}>Log out</button>
           </div>
         )}
         {!user && (
           <div>
-            <Link to="/login">Login</Link>
-            <Link to="/signup">Signup</Link>
+            <Link to="/login"><button>Login</button></Link>
+            <Link to="/signup"><button>Sign Up</button></Link>
           </div>
         )}
       </div>
