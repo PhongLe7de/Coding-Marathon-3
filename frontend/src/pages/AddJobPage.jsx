@@ -22,7 +22,6 @@ const AddJobPage = ({ setJobAdded }) => {
 
   const addJob = async (newJob) => {
     try {
-      console.log("Adding job:", newJob);
       const res = await fetch("https://coding-marathon-3-be-protected.onrender.com/api/jobs", {
         method: "POST",
         headers: {
