@@ -6,12 +6,25 @@ const Home = ({ jobEdited, jobAdded, isAuthenticated, jobDeleted }) => {
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(true);
 
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  const token = user ? user.token : null;
+
   useEffect(() => {
     const fetchJobs = async () => {
       try {
+
         const res = await fetch(
-          "https://coding-marathon-3-be-noauth.onrender.com/api/jobs"
+          "https://coding-marathon-3-be-protected.onrender.com/api/jobs",
+          {
+            method: "GET",
+            headers: {
+              "Authorization": `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
         );
+        
         if (!res.ok) {
           throw new Error("could not fetch the data for that resource");
         }

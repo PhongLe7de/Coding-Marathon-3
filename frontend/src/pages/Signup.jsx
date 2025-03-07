@@ -16,7 +16,7 @@ const Signup = () => {
 
   const navigate = useNavigate();
 
-  const { signup, error } = useSignup(`https://coding-marathon-3-be-auth.onrender.com/api/users/signup`);
+  const { signup, error } = useSignup(`https://coding-marathon-3-be-protected.onrender.com/api/users/signup`);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();

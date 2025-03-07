@@ -14,7 +14,7 @@ const JobPage = ({ setJobDeleted }) => {
   const deleteJob = async (id) => {
     try {
       const res = await fetch(
-        `https://coding-marathon-3-be-auth.onrender.com/api/jobs/${id}`,
+        `https://coding-marathon-3-be-protected.onrender.com/api/jobs/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -34,7 +34,7 @@ const JobPage = ({ setJobDeleted }) => {
     const fetchJob = async () => {
       try {
         const res = await fetch(
-          `https://coding-marathon-3-be-auth.onrender.com/api/jobs/${id}`,
+          `https://coding-marathon-3-be-protected.onrender.com/api/jobs/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
