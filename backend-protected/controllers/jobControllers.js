@@ -58,7 +58,8 @@ const updateJob = async (req, res) => {
   }
 
   try {
-    // const user_id = req.user._id;
+    const user_id = req.user._id;
+    
     const job = await Job.findOneAndUpdate(
       { _id: jobId },
       { ...req.body },
@@ -66,6 +67,9 @@ const updateJob = async (req, res) => {
     );
     if (!job) {
       return res.status(404).json({ message: "Job not found" });
+    }
+    if (user_id !== job.user_id) {
+      return res.status(404).json({ message: "Not authorized" });
     }
     res.status(200).json(job);
   } catch (error) {
@@ -82,10 +86,13 @@ const deleteJob = async (req, res) => {
   }
 
   try {
-    // const user_id = req.user._id;
+    const user_id = req.user._id;
     const job = await Job.findOneAndDelete({ _id: jobId });
     if (!job) {
       return res.status(404).json({ message: "Job not found" });
+    }
+    if (user_id !== job.user_id) {
+      return res.status(404).json({ message: "Not authorized" });
     }
     res.status(204).send(); // 204 No Content
   } catch (error) {
