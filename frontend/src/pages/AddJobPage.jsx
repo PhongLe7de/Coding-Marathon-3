@@ -1,13 +1,19 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const AddJobPage = ({setJobAdded}) => {
+const AddJobPage = ({ setJobAdded }) => {
   const [title, setTitle] = useState("");
   const [type, setType] = useState("Full-Time");
   const [description, setDescription] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [contactPhone, setContactPhone] = useState("");
+  const [location, setLocation] = useState("");
+  const [salary, setSalary] = useState("");
+  const [experienceLevel, setExperienceLevel] = useState("Entry");
+  const [applicationDeadline, setApplicationDeadline] = useState("");
+  const [requirements, setRequirements] = useState([]);
+  const [requirement, setRequirement] = useState("");
 
   const user = JSON.parse(localStorage.getItem("user"));
   const token = user ? user.token : null;
@@ -47,6 +53,11 @@ const AddJobPage = ({setJobAdded}) => {
         contactEmail,
         contactPhone,
       },
+      location,
+      salary: parseFloat(salary),
+      experienceLevel,
+      applicationDeadline: applicationDeadline ? new Date(applicationDeadline) : null,
+      requirements,
     };
 
     const success = await addJob(newJob);
@@ -56,6 +67,13 @@ const AddJobPage = ({setJobAdded}) => {
       navigate("/");
     } else {
       console.error("Failed to add the job");
+    }
+  };
+
+  const addRequirement = () => {
+    if (requirement && !requirements.includes(requirement)) {
+      setRequirements([...requirements, requirement]);
+      setRequirement("");
     }
   };
 
@@ -84,6 +102,7 @@ const AddJobPage = ({setJobAdded}) => {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         ></textarea>
+
         <label>Company Name:</label>
         <input
           type="text"
@@ -105,6 +124,54 @@ const AddJobPage = ({setJobAdded}) => {
           value={contactPhone}
           onChange={(e) => setContactPhone(e.target.value)}
         />
+        <label>Location:</label>
+        <input
+          type="text"
+          required
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+        />
+        <label>Salary:</label>
+        <input
+          type="number"
+          required
+          value={salary}
+          onChange={(e) => setSalary(e.target.value)}
+        />
+        <label>Experience Level:</label>
+        <select
+          value={experienceLevel}
+          onChange={(e) => setExperienceLevel(e.target.value)}
+        >
+          <option value="Entry">Entry</option>
+          <option value="Mid">Mid</option>
+          <option value="Senior">Senior</option>
+        </select>
+
+        <label>Application Deadline:</label>
+        <input
+          type="date"
+          value={applicationDeadline}
+          onChange={(e) => setApplicationDeadline(e.target.value)}
+        />
+
+        <label>Job Requirements:</label>
+        <div>
+          <input
+            type="text"
+            value={requirement}
+            onChange={(e) => setRequirement(e.target.value)}
+          />
+          <button type="button" onClick={addRequirement}>
+            Add Requirement
+          </button>
+        </div>
+        <ul>
+          {requirements.map((req, index) => (
+            <li key={index}>{req}</li>
+          ))}
+        </ul>
+
         <button type="submit">Add Job</button>
       </form>
     </div>

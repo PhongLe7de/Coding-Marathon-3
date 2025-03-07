@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import JobListings from "../components/JobListings";
 
-const Home = ({jobEdited, jobAdded}) => {
+const Home = ({jobEdited, jobAdded, isAuthenticated, jobDeleted}) => {
   const [jobs, setJobs] = useState(null);
-  const [isPending, setIsPending] = useState(true);
   const [error, setError] = useState(null);
+  const [isPending, setIsPending] = useState(true);
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -23,7 +23,7 @@ const Home = ({jobEdited, jobAdded}) => {
       }
     };
     fetchJobs();
-  }, [jobEdited, jobAdded]);
+  }, [jobEdited, jobAdded, isAuthenticated, jobDeleted]);
 
   return (
     <div className="home">

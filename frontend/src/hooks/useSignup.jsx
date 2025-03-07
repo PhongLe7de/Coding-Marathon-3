@@ -7,6 +7,7 @@ export default function useSignup(url) {
   const signup = async (object) => {
     setIsLoading(true);
     setError(null);
+
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

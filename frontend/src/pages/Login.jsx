@@ -2,29 +2,31 @@ import useField from "../hooks/useField";
 import useLogin from "../hooks/useLogin";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Login = ({setUser}) => {
   const navigate = useNavigate();
-  const email = useField("email");
+  const username = useField("username");
   const password = useField("password");
+  const { login } = useLogin("http://localhost:4000/api/users/login");
 
-  const { login, error } = useLogin("http://localhost:4000/api/users/login");
+  const errorText = "Incorrect username or password. Please try again."
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    await login({ email: email.value, password: password.value });
-    if (!error) {
-      console.log("success");
-      navigate("/");
+    const response = await login({ username: username.value, password: password.value });
+    if (!response) {
+      alert(errorText);
+      return
     }
+    setUser(response);
+    navigate("/");
   };
   
-
   return (
     <div className="create">
       <h2>Login</h2>
       <form onSubmit={handleFormSubmit}>
-      <label>Email address:</label>
-        <input {...email} />
+      <label>Usernam:</label>
+        <input {...username} />
         <label>Password:</label>
         <input {...password} />
         <button>Login</button>

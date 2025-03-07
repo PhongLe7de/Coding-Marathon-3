@@ -1,33 +1,40 @@
-import useField from "../hooks/useField";
-import useSignup from "../hooks/useSignup";
+
 import { useNavigate } from "react-router-dom";
+import useSignup from "../hooks/useSignup";
+import useField from "../hooks/useField";
 
 const Signup = () => {
   const navigate = useNavigate();
-  const name = useField("text");  
-  const email = useField("email");
+  const name = useField("text");
+  const username = useField("text");
   const password = useField("password");
-  const phoneNumber = useField("text");
+  const phone_number = useField("text");
   const gender = useField("text");
-  const dateOfBirth = useField("date");
-  const membershipStatus = useField("text");
+  const date_of_birth = useField("date");
+  const membership_status = useField("text");
+  const bio = useField("text");
+  const address = useField("text");
+  const email = useField("email");
+
 
   const { signup, error } = useSignup("http://localhost:4000/api/users/signup");
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     await signup({
-      email: email.value,
-      password: password.value,
       name: name.value,
-      phone_number: phoneNumber.value,
+      username: username.value,
+      password: password.value,
+      phone_number: phone_number.value,
       gender: gender.value,
-      date_of_birth: dateOfBirth.value,
-      membership_status: membershipStatus.value,
+      date_of_birth: date_of_birth.value,
+      membership_status: membership_status.value,
+      bio: bio.value,
+      address: address.value,
     });
+
     if (!error) {
-      console.log("success");
-      navigate("/");
+      navigate("/"); // Navigate to home page after successful signup
     }
   };
 
@@ -36,20 +43,36 @@ const Signup = () => {
       <h2>Sign Up</h2>
       <form onSubmit={handleFormSubmit}>
         <label>Name:</label>
-        <input {...name} />
-        <label>Email address:</label>
-        <input {...email} />
+        <input {...name} required />
+
+        <label>Username:</label>
+        <input {...username} required />
+
+        <label>Email:</label>
+        <input {...email} required />
+
         <label>Password:</label>
-        <input {...password} />
+        <input {...password} required />
+
         <label>Phone Number:</label>
-        <input {...phoneNumber} />
+        <input {...phone_number} required />
+
         <label>Gender:</label>
-        <input {...gender} />
+        <input {...gender} required />
+
         <label>Date of Birth:</label>
-        <input {...dateOfBirth} />
+        <input {...date_of_birth} required />
+
         <label>Membership Status:</label>
-        <input {...membershipStatus} />
-        <button>Sign up</button>
+        <input {...membership_status} required />
+
+        <label>Bio:</label>
+        <textarea {...bio}></textarea>
+
+        <label>Address:</label>
+        <input {...address} required />
+
+        <button type="submit">Sign up</button>
       </form>
     </div>
   );

@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-const JobPage = () => {
+const JobPage = ({setJobDeleted}) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [job, setJob] = useState(null);
@@ -48,11 +48,8 @@ const JobPage = () => {
     if (!confirm) return;
 
     deleteJob(jobId);
+    setJobDeleted(true);
     navigate("/");
-  };
-
-  const onEdit = (jobId) => {
-    console.log(jobId);
   };
 
   return (
