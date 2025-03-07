@@ -13,11 +13,14 @@ describe("User Routes", () => {
     it("should signup a new user with valid credentials", async () => {
       // Arrange
       const userData = {
-        email: "test@example.com",
+        name: "Test Man",
+        username: "testman",
         password: "R3g5T7#gh",
         phone_number: "09-123-47890",
+        gender: "Male",
         date_of_birth: "1999-01-01",
         membership_status: "Active",
+        address: "Testing Street 7"
       };
 
       // Act
@@ -31,11 +34,13 @@ describe("User Routes", () => {
     it("should return an error with invalid credentials", async () => {
       // Arrange
       const userData = {
-        email: "test@example.com",
+        name: "Test Man",
+        username: "testman",
         password: "invalidpassword",
-        phone_number: "1234567890",
-        date_of_birth: "1990-01-01",
+        gender: "Male",
+        date_of_birth: "1999-01-01",
         membership_status: "Active",
+        address: "Testing Street 7"
       };
 
       // Act
@@ -51,7 +56,7 @@ describe("User Routes", () => {
     it("should login a user with valid credentials", async () => {
       // Arrange
       const userData = {
-        email: "test@example.com",
+        username: "testman",
         password: "R3g5T7#gh",
       };
 
@@ -66,7 +71,7 @@ describe("User Routes", () => {
     it("should return an error with invalid credentials", async () => {
       // Arrange
       const userData = {
-        email: "test@example.com",
+        username: "testman",
         password: "invalidpassword",
       };
 

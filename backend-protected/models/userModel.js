@@ -13,11 +13,6 @@ const userSchema = new Schema({
   bio: { type: String },
   address: { type: String, required: true },
   profile_picture: { type: String, required: false },
-  user_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: 'User',
-  },
 }, { timestamps: true, versionKey: false });
 
 module.exports = mongoose.model("User", userSchema);
