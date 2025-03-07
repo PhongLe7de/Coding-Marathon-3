@@ -15,11 +15,13 @@ const App = () => {
   const [jobAdded, setJobAdded] = useState(false);
   const [jobEdited, setJobEdited] = useState(false);
   const [jobDeleted, setJobDeleted] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    return user && user.token ? true : false;
-  });
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  useEffect(()=>{
+    if(user){
+      setIsAuthenticated(true)
+    }
+  },[user])
 
   return (
     <div className="App">
