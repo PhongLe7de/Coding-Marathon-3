@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 
 // Generate JWT
 const generateToken = (_id) => {
-  return jwt.sign({ _id }, process.env.SECRET, {
+  return jwt.sign({_id}, process.env.SECRET, {
     expiresIn: "3d",
   });
 };
@@ -34,18 +34,17 @@ const signupUser = async (req, res) => {
       !gender ||
       !date_of_birth ||
       !membership_status ||
-      !bio ||
       !address
     ) {
       res.status(400);
-      throw new Error("Please add all fields");
+      return res.status(400).json({error: "Please add all required fields"});
     }
     // Check if user exists
-    const userExists = await User.findOne({ username });
+    const userExists = await User.findOne({username});
 
     if (userExists) {
       res.status(400);
-      throw new Error("User already exists");
+      return res.status(400).json({error: "User already exists"});
     }
 
     // Hash password
@@ -61,21 +60,21 @@ const signupUser = async (req, res) => {
       gender,
       date_of_birth,
       membership_status,
-      bio,
+      bio: bio || "",
       address,
-      profile_picture,
+      profile_picture: profile_picture || "",
     });
 
     if (user) {
       // console.log(user._id);
-     const token = generateToken(user._id);
-      res.status(201).json({ username, token });
+      const token = generateToken(user._id);
+      res.status(201).json({username, token});
     } else {
       res.status(400);
       throw new Error("Invalid user data");
     }
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({error: error.message});
   }
 };
 
@@ -83,20 +82,20 @@ const signupUser = async (req, res) => {
 // @route   POST /api/users/login
 // @access  Public
 const loginUser = async (req, res) => {
-  const { username, password } = req.body;
+  const {username, password} = req.body;
   try {
     // Check for user email
-    const user = await User.findOne({ username });
+    const user = await User.findOne({username});
 
     if (user && (await bcrypt.compare(password, user.password))) {
       const token = generateToken(user._id);
-      res.status(200).json({ username, token });
+      res.status(200).json({username, token});
     } else {
       res.status(400);
       throw new Error("Invalid credentials");
     }
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({error: error.message});
   }
 };
 
@@ -107,7 +106,7 @@ const getMe = async (req, res) => {
   try {
     res.status(200).json(req.user);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({error: error.message});
   }
 };
 
